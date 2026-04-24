@@ -197,12 +197,12 @@ jobs:
           done
 
       - name: Submit job and poll for completion
-        run: |
+        run: | 
           MAX_RETRIES=20
           RETRY_INTERVAL=5
 
           echo "Submitting job..."
-          RESPONSE=$(curl -s -X POST http://localhost:3000/submit)
+          RESPONSE=$(curl -v -X POST http://localhost:3000/submit)
           echo "Response: $RESPONSE"
 
           JOB_ID=$(echo $RESPONSE | python3 -c "import sys, json; print(json.load(sys.stdin)['job_id'])")
