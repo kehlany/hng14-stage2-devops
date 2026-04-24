@@ -1,15 +1,13 @@
-# Build stage
 FROM python:3.11-slim AS builder
 WORKDIR /app
 COPY api/requirements.txt .
-RUN pip install --user --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Final stage
 FROM python:3.11-slim
 WORKDIR /app
-COPY --from=builder /root/.local /root/.local
+COPY --from=builder /usr/local/lib/python3.11/site-packages /usr/local/lib/python3.11/site-packages
+COPY --from=builder /usr/local/bin/uvicorn /usr/local/bin/uvicorn
 COPY api/ .
-ENV PATH=/root/.local/bin:$PATH
 RUN useradd -m appuser
 USER appuser
 EXPOSE 8000
